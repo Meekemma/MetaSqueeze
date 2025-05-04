@@ -29,8 +29,6 @@ venv.bak/
 # Media files
 /media/
 
-# Static files (if you're not using Django's collectstatic for production)
-static/
 
 # IDE files
 .idea/
