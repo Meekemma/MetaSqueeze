@@ -1,0 +1,52 @@
+# Python bytecode files
+__pycache__/
+*.py[cod]
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+*.db-journal
+*.pot
+
+# Virtual environment directories
+.env
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django migrations folder (they are automatically created when you run makemigrations)
+*/migrations/
+
+# Docker-related files
+*.dockerignore
+
+# Media files
+/media/
+
+# Static files (if you're not using Django's collectstatic for production)
+static/
+
+# IDE files
+.idea/
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/

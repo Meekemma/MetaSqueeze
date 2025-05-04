@@ -1,0 +1,50 @@
+services:
+  backend:
+    container_name: meta_squeeze
+    build:
+      context: .  # ✅ Fix: This should be the current directory
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8001:8000"
+    volumes:
+      - .:/usr/src/app
+      - ./db.sqlite3:/usr/src/app/db.sqlite3 
+    depends_on:
+      - redis
+    env_file:
+      - .env  # ✅ Ensure .env is in the root folder
+    restart: always
+
+  redis:
+    image: redis:alpine
+    container_name: redis_server_squeez
+    restart: always
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .  # ✅ Uses the same build as backend
+    container_name: celery_worker_squeez
+    command: celery -A MetaSqueeze worker --loglevel=info
+    volumes:
+      - .:/usr/src/app
+      - ./db.sqlite3:/usr/src/app/db.sqlite3
+    depends_on:
+      - backend
+      - redis
+    env_file:
+      - .env
+    restart: always
+
+  celery-beat:
+    build: .  # ✅ Fix: Use the same build context
+    container_name: celery_beat_squeez
+    command: celery -A MetaSqueeze worker --loglevel=info
+    depends_on:
+      - backend
+      - redis
+      - celery
+    env_file:
+      - .env
+    restart: always
+ 
