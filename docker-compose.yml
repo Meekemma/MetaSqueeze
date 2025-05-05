@@ -1,18 +1,21 @@
+version: '3.8'
+
 services:
   backend:
     container_name: meta_squeeze
     build:
-      context: .  # ✅ Fix: This should be the current directory
+      context: .
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8001:8000"
     volumes:
       - .:/usr/src/app
-      - ./db.sqlite3:/usr/src/app/db.sqlite3 
+      - ./db.sqlite3:/usr/src/app/db.sqlite3
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     env_file:
-      - .env  # ✅ Ensure .env is in the root folder
+      - .env
     restart: always
 
   redis:
@@ -21,30 +24,36 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   celery:
-    build: .  # ✅ Uses the same build as backend
+    build: .
     container_name: celery_worker_squeez
     command: celery -A MetaSqueeze worker --loglevel=info
     volumes:
       - .:/usr/src/app
       - ./db.sqlite3:/usr/src/app/db.sqlite3
     depends_on:
-      - backend
-      - redis
+      redis:
+        condition: service_healthy
     env_file:
       - .env
     restart: always
 
   celery-beat:
-    build: .  # ✅ Fix: Use the same build context
+    build: .
     container_name: celery_beat_squeez
-    command: celery -A MetaSqueeze worker --loglevel=info
+    command: celery -A MetaSqueeze beat --loglevel=info
+    volumes:
+      - .:/usr/src/app
+      - ./db.sqlite3:/usr/src/app/db.sqlite3
     depends_on:
-      - backend
-      - redis
-      - celery
+      redis:
+        condition: service_healthy
     env_file:
       - .env
     restart: always
- 
