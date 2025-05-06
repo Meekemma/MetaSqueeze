@@ -7,6 +7,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+
+
+
 def convert_pdf_to_word(input_path, output_path):
     """
     Convert a PDF file to Word (DOCX) using pdf2docx.
@@ -14,9 +18,21 @@ def convert_pdf_to_word(input_path, output_path):
     logger.info(f"Converting PDF to Word: {input_path} -> {output_path}")
     cv = Converter(input_path)
     try:
-        cv.convert(output_path, start=0, end=None)
+        cv.convert(
+            output_path,
+            start=0,
+            end=None,
+            layout_mode='loose',
+            preserve_font_direction=True,
+            preserve_image=True,
+            preserve_table=True
+        )
+    except Exception as e:
+        logger.error(f"PDF to Word conversion failed: {e}")
+        raise
     finally:
         cv.close()
+
 
 
 

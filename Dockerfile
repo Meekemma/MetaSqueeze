@@ -1,30 +1,25 @@
 FROM python:3.11.4
 
-# Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# Install pandoc, LibreOffice, and dependencies
+WORKDIR /usr/src/app
+
+# Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     pandoc \
     libreoffice \
     libreoffice-java-common && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    pandoc --version && \
-    libreoffice --version
-
-# Set working directory
-WORKDIR /usr/src/app
+    rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY ./requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir --timeout=120 -r requirements.txt
+COPY requirements.txt .
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy project files
 COPY . .
 
-# Expose port
 EXPOSE 8000

@@ -9,8 +9,8 @@ class UploadedImage(models.Model):
         ('PNG', 'PNG'),
     ]
 
-    original_image = models.ImageField(upload_to='images/originals/')
-    optimized_image = models.ImageField(upload_to='images/optimized/', null=True, blank=True)
+    original_image = models.ImageField(upload_to='originals/')
+    optimized_image = models.ImageField(upload_to='optimized/', null=True, blank=True)
     width = models.IntegerField(null=True, blank=True)
     height = models.IntegerField(null=True, blank=True)
     format = models.CharField(max_length=10, null=True, blank=True)  
