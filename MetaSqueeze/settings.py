@@ -37,13 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #Apps
+    'accounts.apps.AccountsConfig',
     'base.apps.BaseConfig', 
     'fileconvert.apps.FileconvertConfig',
 
     'rest_framework',
+    'rest_framework_simplejwt',
+
 ]
 
 ASGI_APPLICATION = 'MetaSqueeze.asgi.application'
+
+AUTH_USER_MODEL = 'accounts.User'
 
 
 
@@ -68,6 +73,18 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'MetaSqueeze.urls'
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+    
+}
+
+
 
 TEMPLATES = [
     {
@@ -113,6 +130,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        'NAME': 'accounts.validators.CustomPasswordValidator',
     },
 ]
 
