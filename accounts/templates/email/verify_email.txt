@@ -1,0 +1,10 @@
+Hello {{ user.first_name }},
+
+Thank you for signing up.
+
+Please verify your email address by clicking the link below:
+{{ verify_url }}
+
+If you didn’t create this account, you can ignore this message.
+
+— Your Team at {{ request.get_host }}
