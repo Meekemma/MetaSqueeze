@@ -6,6 +6,8 @@ from django.core.files.base import ContentFile
 from io import BytesIO
 from .models import UploadedImage
 from datetime import datetime
+from datetime import timedelta
+from django.utils.timezone import now
 
 logger = logging.getLogger(__name__)
 
@@ -94,3 +96,31 @@ def convert_gps_to_decimal(degrees, minutes, seconds, direction):
     if direction in ['S', 'W']:
         decimal = -decimal
     return decimal
+
+
+
+@shared_task
+def cleanup_old_images():
+    """
+    Deletes images older than 30 days from the database and filesystem.
+    """
+    try:
+        threshold_date = now() - timedelta(days=30)
+        old_images = UploadedImage.objects.filter(uploaded_at__lt=threshold_date)
+
+        deleted_count = 0  # ✅ Counter for deleted images
+
+        for image in old_images:
+            # Delete the image files from the filesystem
+            if image.original_image:
+                image.original_image.delete(save=False)
+            if image.optimized_image:
+                image.optimized_image.delete(save=False)
+
+            # Delete the image record from the database
+            image.delete()
+            deleted_count += 1  # ✅ Increment after deletion
+
+        logger.info(f"Deleted {deleted_count} old images.")
+    except Exception as e:
+        logger.error(f"Error during cleanup of old images: {e}", exc_info=True)
