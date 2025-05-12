@@ -170,19 +170,8 @@ docker-compose exec web python manage.py test
 * ✅ Progress Tracking & History
 * ✅ Swagger API Documentation
 
----
 
-## 📝 License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE).
-
----
-
-## ✨ Author
-
-Made with ❤️ by [Meekemma](https://github.com/Meekemma)
-
----
 
 ## 🔗 Useful Commands Recap
 
@@ -199,6 +188,15 @@ Made with ❤️ by [Meekemma](https://github.com/Meekemma)
 
 ---
 
-Do you want me to also generate a **`.env.example` file** (with correct keys for your MetaSqueeze project)?  
-Reply with `Yes, give me .env.example`.
-```
+## ✨ Author
+
+Made with ❤️ by [Meekemma](https://github.com/Meekemma)
+
+---
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
+
